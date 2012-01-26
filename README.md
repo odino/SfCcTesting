@@ -27,7 +27,9 @@ ln -s lib/vendor/odino/SfCcTesting/phpunit.xml.dist phpunit.xml
 
 Write your first test:
 
-``` bash touch test/phpunit/HomepageTest.php
+``` bash
+touch test/phpunit/HomepageTest.php
+``` php
 <?php
 
 use Symfony\Component\DomCrawler\Crawler;
