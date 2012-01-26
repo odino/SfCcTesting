@@ -1,0 +1,29 @@
+{
+    "name": "odino/SfCcTesting",
+    "type": "library",
+    "description": "A port of the Symfony2 testing mechanism to symfony 1.X.",
+    "keywords": ["test", "PHPUnit", "symfony"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alessandro Nadalin",
+            "email": "alessandro.nadalin@gmail.com",
+            "homepage": "http://www.odino.org"
+        },
+        {
+            "name": "Matteo Biagetti",
+            "email": "matteo.biageti@gmail.com",
+            "homepage": "http://it.linkedin.com/in/matteobiagetti"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "odino": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/dom-crawler": ">=2.0",
+        "symfony/css-selector": ">=2.0"
+    }
+}
