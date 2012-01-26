@@ -6,7 +6,11 @@ functional testing mechanism into [symfony 1.X](http://www.symfony-project.org).
 ## Installation 
 
 Clone the repository under the `lib/vendor/odino` directory: you can change
-the location of the library, although this one is the recommended one.
+the location of the library, although this is the recommended one.
+
+``` bash
+git clone git@github.com:odino/SfCcTesting.git lib/vendor/odino/SfCcTesting
+```
 
 Move into the library's root, download composer and install the dependencies:
 
