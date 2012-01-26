@@ -62,4 +62,4 @@ class HomepageTest extends WebTestCase
 and run it with a simple `phpunit test/phpunit` from the root of your
 symfony 1.X project.
 
-{% img center http://odino.github.com/images/phpunit.symfony.png %}
+![testing output](http://odino.github.com/images/phpunit.symfony.png)#
