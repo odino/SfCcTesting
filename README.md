@@ -29,6 +29,8 @@ Write your first test:
 
 ``` bash
 touch test/phpunit/HomepageTest.php
+```
+
 ``` php
 <?php
 
