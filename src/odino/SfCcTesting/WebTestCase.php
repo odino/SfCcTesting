@@ -18,28 +18,70 @@
 
 namespace odino\SfCcTesting;
 
+use Symfony\Component\DomCrawler\Crawler;
+
 abstract class WebTestCase extends \PHPUnit_Framework_TestCase
 {
-  protected function createClient()
-  {
-    $this->bootstrapSymfony($this->getApplication());
+    protected $client;
 
-    return new Browser();
-  }
+    protected function createClient()
+    {
+      $this->bootstrapSymfony($this->getApplication());
+
+      return new Browser();
+    }
+
+    /**
+    * Includes the symfony 1.X bootstrap file for functional tests.
+    * 
+    * @param   string  The application to bootstrap
+    * @return  void
+    */
+    abstract protected function bootstrapSymfony($app);
+
+    /**
+    * Returns the application to test.
+    * 
+    * @return string The application name (frontend, backend, ...)
+    */
+    abstract protected function getApplication();
+
+    protected function getClient()
+    {
+        return $this->client;
+    }
   
-  /**
-   * Includes the symfony 1.X bootstrap file for functional tests.
-   * 
-   * @param   string  The application to bootstrap
-   * @return  void
-   */
-  abstract protected function bootstrapSymfony($app);
-  
-  /**
-   * Returns the application to test.
-   * 
-   * @return string The application name (frontend, backend, ...)
-   */
-  abstract protected function getApplication();
+    protected function getClientResponse()
+    {
+        $client = $this->getClient();
+
+        return $client ? $client->getResponse()->getContent() : null;
+    }
+    
+    protected function getResponse()
+    {
+      return $this->getClient() ? $this->getClient()->getResponse() : null;
+    }
+    
+    protected function assertElementExists(Crawler $crawler, $selector)
+    {
+        if ($crawler->filter($selector)->count()) {
+            return true;
+        }
+        else {
+            $this->fail($this->getClientResponse() . sprintf("\nUnable to find %s in the current DOM", $selector));
+        }
+    }
+    
+    protected function assertStatusCode($code)
+    {
+        if ($response = $this->getResponse()) {
+          $this->assertEquals($code, $response->getStatusCode(), sprintf("Status code %d was expected", $code));
+          
+          return true;
+        }
+      
+        $this->fail("No response");
+    }
 }
 
