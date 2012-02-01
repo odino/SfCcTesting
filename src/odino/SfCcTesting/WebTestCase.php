@@ -24,13 +24,6 @@ abstract class WebTestCase extends \PHPUnit_Framework_TestCase
 {
     protected $client;
 
-    protected function createClient()
-    {
-      $this->bootstrapSymfony($this->getApplication());
-
-      return new Browser();
-    }
-
     /**
     * Includes the symfony 1.X bootstrap file for functional tests.
     * 
@@ -45,24 +38,19 @@ abstract class WebTestCase extends \PHPUnit_Framework_TestCase
     * @return string The application name (frontend, backend, ...)
     */
     abstract protected function getApplication();
-
-    protected function getClient()
+    
+    public function setup()
     {
-        return $this->client;
-    }
-  
-    protected function getClientResponse()
-    {
-        $client = $this->getClient();
-
-        return $client ? $client->getResponse()->getContent() : null;
+      $this->bootstrapSymfony($this->getApplication());
     }
     
-    protected function getResponse()
-    {
-      return $this->getClient() ? $this->getClient()->getResponse() : null;
-    }
-    
+    /**
+     * Checks that the node identified with the $selector exists.
+     * 
+     * @param Crawler $crawler
+     * @param string $selector
+     * @return boolean 
+     */
     protected function assertElementExists(Crawler $crawler, $selector)
     {
         if ($crawler->filter($selector)->count()) {
@@ -73,6 +61,12 @@ abstract class WebTestCase extends \PHPUnit_Framework_TestCase
         }
     }
     
+    /**
+     * Checks the status code of the response.
+     * 
+     * @param  int $code
+     * @return boolean 
+     */
     protected function assertStatusCode($code)
     {
         if ($response = $this->getResponse()) {
@@ -82,6 +76,65 @@ abstract class WebTestCase extends \PHPUnit_Framework_TestCase
         }
       
         $this->fail("No response");
+    }
+    
+    /**
+     * Creats a new client.
+     * 
+     * @return \odino\SfCcTesting\Browser 
+     */
+    protected function createClient()
+    {
+      return new Browser();
+    }
+    
+    /**
+     * Mark the test failed and outputs the HTTP response's body.
+     *
+     * @param string $selector 
+     */
+    protected function debugResponse($selector = "body")
+    {
+        if ($this->getResponseBody()) {
+          $crawler = new Crawler();
+          $crawler->add($this->getResponseBody());
+          $message = "Response debug:\n";
+          $message .= $crawler->filter($selector)->text();
+          
+          $this->fail($message);
+        }
+        
+        $this->fail("No response to debug");
+    }
+
+    /**
+     * Returns the internal client.
+     * 
+     * @return \odino\SfCcTesting\Browser 
+     */
+    protected function getClient()
+    {
+        return $this->client;
+    }
+  
+    /**
+     * Returns the body of the last HTTP response the client received.
+     * 
+     * @return type 
+     */
+    protected function getResponseBody()
+    {
+        return $this->getResponse() ? $this->getResponse()->getContent() : null;
+    }
+    
+    /**
+     * Returns the last HTTP response the client received.
+     * 
+     * @return sfWebResponse
+     */
+    protected function getResponse()
+    {
+      return $this->getClient() ? $this->getClient()->getResponse() : null;
     }
 }
 
